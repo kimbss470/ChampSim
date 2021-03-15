@@ -1,5 +1,13 @@
 #include "ooo_cpu.h"
 #include "set.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+
+//int trace_count_ = 0;
+//ofstream fout("trace_essential.txt");
 
 // out-of-order core
 O3_CPU ooo_cpu[NUM_CPUS]; 
@@ -158,6 +166,7 @@ void O3_CPU::handle_branch()
         } else {
             if (!fread(&current_instr, instr_size, 1, trace_file)) {
                 // reached end of file for this trace
+				//fout.close();
                 cout << "*** Reached end of trace for Core: " << cpu << " Repeating trace: " << trace_string << endl; 
 
                 // close the trace file and re-open it
@@ -168,7 +177,26 @@ void O3_CPU::handle_branch()
                     assert(0);
                 }
             } else { // successfully read the trace
+			   	/* 
+				 if (current_instr.destination_memory[0]) {		//store instr			
+					fout << "ip: " << to_string(current_instr.ip);
+					for( int i = 0; i < NUM_INSTR_DESTINATIONS && current_instr.destination_memory[i]; i++ ) {
+						fout << " dest_mem[" << i << "]: " << to_string(current_instr.destination_memory[i]);
+					}		
+					fout << endl;
+				}
+			    
+                if(current_instr.source_memory[0]) {		//load instr
+					fout << "ip: " << to_string(current_instr.ip);
+					for( int i = 0; i < NUM_INSTR_SOURCES && current_instr.source_memory[i]; i++ ) {
+						fout << " src_mem[" << i << "]: " << to_string(current_instr.source_memory[i]);
+					}
+					fout << endl;
+				}	
+				*/
 
+				
+					
                 // copy the instruction into the performance model's instruction format
                 ooo_model_instr arch_instr;
                 int num_reg_ops = 0, num_mem_ops = 0;

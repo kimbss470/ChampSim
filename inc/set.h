@@ -31,7 +31,7 @@ class fastset {
 	} data;
 
 	int
-		card;		// cardinality of small set
+		card;		// cardinality(number of elements) of small set
 
 	// set a bit in the bits
 

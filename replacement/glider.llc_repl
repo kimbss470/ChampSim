@@ -8,6 +8,7 @@
 
 using namespace std;
 
+ofstream fout("glider_prediction.txt");
 
 #define NUM_CORE 1
 #define LLC_SETS NUM_CORE*2048
@@ -22,7 +23,7 @@ uint32_t rrpv[LLC_SETS][LLC_WAYS];
 uint64_t perset_mytimer[LLC_SETS];
 
 uint64_t signatures[LLC_SETS][LLC_WAYS];
-#include "glider_predictor_ver2.h"
+#include "glider_predictor.h"
 GLIDER_PC_PREDICTOR* glider_predictor;  
 
 #define OPTGEN_VECTOR_SIZE 128
@@ -206,6 +207,7 @@ void CACHE::llc_update_replacement_state (uint32_t cpu, uint32_t set, uint32_t w
     }
 
     int new_prediction = glider_predictor->get_prediction (PC);
+	fout << "PC : " << to_string(PC) << ", sampled : " << to_string(SAMPLED_SET(set)) << ", pred : " << to_string(new_prediction) << ", hit : " << to_string(hit) << endl;
 	
     signatures[set][way] = PC;	
     //Set RRPV

@@ -1,3 +1,6 @@
+//Revised
+
+
 //Hawkeye Cache Replacement Tool v2.0
 //UT AUSTIN RESEARCH LICENSE (SOURCE CODE)
 //The University of Texas at Austin has developed certain software and documentation that it desires to
@@ -19,32 +22,34 @@
 using namespace std;
 
 #include <iostream>
+
 #include <math.h>
 #include <set>
 #include <vector>
 
-struct ADDR_INFO	//per block..???
+struct ADDR_INFO
 {
     uint64_t addr;
     uint32_t last_quanta;
     uint64_t PC; 
     bool prefetched;
     uint32_t lru;
+	uint64_t global_access_timer;
 
-    void init(unsigned int curr_quanta)	
-    					  // not used	
-	{
+    void init()
+    {
         last_quanta = 0;
         PC = 0;
         prefetched = false;
         lru = 0;
+		global_access_timer = 0;
     }
 
-    void update(unsigned int curr_quanta, uint64_t _pc, bool prediction)
-    														// not used
-	{
+    void update(unsigned int curr_quanta, uint64_t _pc, bool prediction, uint64_t global_timer)
+    {
         last_quanta = curr_quanta;
         PC = _pc;
+		global_access_timer = global_timer;
     }
 
     void mark_prefetch()
@@ -53,7 +58,7 @@ struct ADDR_INFO	//per block..???
     }
 };
 
-struct OPTgen
+struct OPTgen	//
 {
     vector<unsigned int> liveness_history;
 

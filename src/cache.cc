@@ -76,7 +76,8 @@ void CACHE::handle_fill()
                     writeback_packet.data = block[set][way].data;
                     writeback_packet.instr_id = MSHR.entry[mshr_index].instr_id;
                     writeback_packet.ip = 0; // writeback does not have ip
-                    writeback_packet.type = WRITEBACK;
+                    //writeback_packet.ip = MSHR.entry[mshr_index].ip;
+					writeback_packet.type = WRITEBACK;
                     writeback_packet.event_cycle = current_core_cycle[fill_cpu];
                     writeback_packet.dirty_block = block[set][way].dirty;
 
@@ -152,7 +153,8 @@ void CACHE::handle_fill()
                     writeback_packet.data = block[set][way].data;
                     writeback_packet.instr_id = MSHR.entry[mshr_index].instr_id;
                     writeback_packet.ip = 0; // writeback does not have ip
-                    writeback_packet.type = WRITEBACK;
+                    //writeback_packet.ip = MSHR.entry[mshr_index].ip;
+					writeback_packet.type = WRITEBACK;
                     writeback_packet.event_cycle = current_core_cycle[fill_cpu];
                     writeback_packet.dirty_block = block[set][way].dirty;
 
@@ -405,6 +407,7 @@ void CACHE::handle_writeback()
                             writeback_packet.data = block[set][way].data;
                             writeback_packet.instr_id = WQ.entry[index].instr_id;
                             writeback_packet.ip = 0;
+                            //writeback_packet.ip = WQ.entry[index].ip;
                             writeback_packet.type = WRITEBACK;
                             writeback_packet.event_cycle = current_core_cycle[writeback_cpu];
                             writeback_packet.dirty_block = block[set][way].dirty;
@@ -455,6 +458,7 @@ void CACHE::handle_writeback()
                             writeback_packet.data = block[set][way].data;
                             writeback_packet.instr_id = WQ.entry[index].instr_id;
                             writeback_packet.ip = 0;
+                            //writeback_packet.ip = WQ.entry[index].ip;
                             writeback_packet.type = WRITEBACK;
                             writeback_packet.event_cycle = current_core_cycle[writeback_cpu];
                             writeback_packet.dirty_block = block[set][way].dirty;
@@ -579,7 +583,7 @@ void CACHE::handle_read()
 #ifdef PRINT_OFFSET_PATTERN
                     if (cache_type == IS_L2C) {
                         // collect offset pattern (for L2 only)
-                        collect_offset_pattern(block_address)
+                        collect_offset_pattern(block_address);
                     }
 #endif
                 }
@@ -792,7 +796,7 @@ void CACHE::handle_read()
 #ifdef PRINT_OFFSET_PATTERN
                         if (cache_type == IS_L2C) {
                             // collect offset pattern (for L2 only)
-                            collect_offset_pattern(block_address)
+                            collect_offset_pattern(block_address);
                         }
 #endif
                     }

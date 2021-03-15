@@ -4,6 +4,7 @@
 #include "ooo_cpu.h"
 #include "uncore.h"
 
+
 uint8_t warmup_complete[NUM_CPUS], 
         simulation_complete[NUM_CPUS], 
         all_warmup_complete = 0, 
@@ -99,7 +100,7 @@ void print_roi_stats(uint32_t cpu, CACHE *cache)
     }
 
     cout << cache->NAME;
-    cout << " TOTAL     ACCESS: " << setw(10) << TOTAL_ACCESS << "  HIT: " << setw(10) << TOTAL_HIT << "  MISS: " << setw(10) << TOTAL_MISS << endl;
+    cout << " TOTAL     ACCESS: " << setw(10) << TOTAL_ACCESS << "  HIT: " << setw(10) << TOTAL_HIT << "  MISS: " << setw(10) << TOTAL_MISS << " HIT RATE: " << setw(10) << 100*((double)TOTAL_HIT/(double)TOTAL_ACCESS) << endl;
 
     cout << cache->NAME;
     cout << " LOAD      ACCESS: " << setw(10) << cache->roi_access[cpu][0] << "  HIT: " << setw(10) << cache->roi_hit[cpu][0] << "  MISS: " << setw(10) << cache->roi_miss[cpu][0] << endl;
@@ -149,19 +150,19 @@ void print_sim_stats(uint32_t cpu, CACHE *cache)
     }
 
     cout << cache->NAME;
-    cout << " TOTAL     ACCESS: " << setw(10) << TOTAL_ACCESS << "  HIT: " << setw(10) << TOTAL_HIT << "  MISS: " << setw(10) << TOTAL_MISS << endl;
+    cout << " TOTAL     ACCESS: " << setw(10) << TOTAL_ACCESS << "  HIT: " << setw(10) << TOTAL_HIT << "  MISS: " << setw(10) << TOTAL_MISS << " HIT RATE: " << setw(10) << (double)(TOTAL_HIT/TOTAL_ACCESS) << endl;
 
     cout << cache->NAME;
-    cout << " LOAD      ACCESS: " << setw(10) << cache->sim_access[cpu][0] << "  HIT: " << setw(10) << cache->sim_hit[cpu][0] << "  MISS: " << setw(10) << cache->sim_miss[cpu][0] << endl;
+    cout << " LOAD      ACCESS: " << setw(10) << cache->sim_access[cpu][0] << "  HIT: " << setw(10) << cache->sim_hit[cpu][0] << "  MISS: " << setw(10) << cache->sim_miss[cpu][0] << " HIT RATE: " << setw(10) << (double)(cache->sim_hit[cpu][0]/cache->sim_access[cpu][0]) << endl;
 
     cout << cache->NAME;
-    cout << " RFO       ACCESS: " << setw(10) << cache->sim_access[cpu][1] << "  HIT: " << setw(10) << cache->sim_hit[cpu][1] << "  MISS: " << setw(10) << cache->sim_miss[cpu][1] << endl;
+    cout << " RFO       ACCESS: " << setw(10) << cache->sim_access[cpu][1] << "  HIT: " << setw(10) << cache->sim_hit[cpu][1] << "  MISS: " << setw(10) << cache->sim_miss[cpu][1] << " HIT RATE: " << setw(10) << (double)(cache->sim_hit[cpu][1]/cache->sim_access[cpu][1]) << endl;
 
     cout << cache->NAME;
-    cout << " PREFETCH  ACCESS: " << setw(10) << cache->sim_access[cpu][2] << "  HIT: " << setw(10) << cache->sim_hit[cpu][2] << "  MISS: " << setw(10) << cache->sim_miss[cpu][2] << endl;
+    cout << " PREFETCH  ACCESS: " << setw(10) << cache->sim_access[cpu][2] << "  HIT: " << setw(10) << cache->sim_hit[cpu][2] << "  MISS: " << setw(10) << cache->sim_miss[cpu][2] << " HIT RATE: " << setw(10) << (double)(cache->sim_hit[cpu][2]/cache->sim_access[cpu][2]) << endl;
 
     cout << cache->NAME;
-    cout << " WRITEBACK ACCESS: " << setw(10) << cache->sim_access[cpu][3] << "  HIT: " << setw(10) << cache->sim_hit[cpu][3] << "  MISS: " << setw(10) << cache->sim_miss[cpu][3] << endl;
+    cout << " WRITEBACK ACCESS: " << setw(10) << cache->sim_access[cpu][3] << "  HIT: " << setw(10) << cache->sim_hit[cpu][3] << "  MISS: " << setw(10) << cache->sim_miss[cpu][3] << " HIT RATE: " << setw(10) << (double)(cache->sim_hit[cpu][3]/cache->sim_access[cpu][3]) << endl;
 }
 
 void print_branch_stats()
@@ -937,8 +938,9 @@ int main(int argc, char** argv)
                 all_simulation_complete++;
             }
 
-            if (all_simulation_complete == NUM_CPUS)
-                run_simulation = 0;
+            if (all_simulation_complete == NUM_CPUS){
+		run_simulation = 0;
+	    }
         }
 
         // TODO: should it be backward?
